@@ -1,28 +1,41 @@
 const express = require("express");
 const request = require("request");
+const bcrypt = require("bcryptjs");
 const router = express.Router();
+
+const User = require("../../models/User");
 
 /**
  * @route POST api/areeba
  * @desc Request token
  * @access Public
  */
-router.post("/oauth2/token", (req, res) => {
-  console.log(req.headers);
-  const options = {
-    method: "POST",
-    url: "https://api.areeba.com/oauth2/token",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: req.headers.authorization
-    },
-    form: {
-      grant_type: req.body.grant_type
-    }
-  };
-  request(options, (err, response) => {
-    if (err) throw err;
-    res.send(response.toJSON().body);
+router.post("/", (req, res) => {
+  const { username, password } = req.body;
+  User.findOne({ username: username }).then(user => {
+    if (!username || !password)
+      return res.status(400).json({ msg: "Please enter all fields" });
+    if (!user) return res.status(400).json({ msg: "User does not exists" });
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (!isMatch)
+        return res.status(400).json({ msg: "Invalid Credentials!" });
+      const options = {
+        method: "POST",
+        url: "https://api.areeba.com/oauth2/token",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization:
+            "Basic TjJndmVGTUxJTjhEa1I2VVNHZVZtdUV2d2NFYTpQaDRla3pJUmxGWmdJOFVqalFLQnhyc1Y1NW9h"
+        },
+        form: {
+          grant_type: "client_credentials"
+        }
+      };
+      request(options, (err, response) => {
+        if (err) throw err;
+        res.send(response.toJSON().body);
+      });
+    });
   });
 });
 

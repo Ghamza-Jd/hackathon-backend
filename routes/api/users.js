@@ -16,7 +16,6 @@ router.post("/", (req, res) => {
       first: first,
       last: last,
       username: username,
-      email: email,
       phone: phone,
       password: password
     });

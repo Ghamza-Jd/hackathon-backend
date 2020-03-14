@@ -21,6 +21,4 @@ const port = process.env.PORT || 5000;
 app.use("/api/users", users);
 app.use("/api/areeba", areeba);
 
-app.listen(port, () =>
-  console.log(`Server started at http://localhost:${port}`)
-);
+app.listen(port, "0.0.0.0");
