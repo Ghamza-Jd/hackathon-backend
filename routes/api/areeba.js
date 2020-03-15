@@ -7,7 +7,7 @@ const User = require("../../models/User");
 
 /**
  * @route POST api/areeba
- * @desc Request token
+ * @desc Request app token
  * @access Public
  */
 router.post("/", (req, res) => {

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const users = require("./routes/api/users");
 const areeba = require("./routes/api/areeba");
+const transactions = require("./routes/api/transactions");
 
 const app = express();
 
@@ -20,5 +21,6 @@ const port = process.env.PORT || 5000;
 
 app.use("/api/users", users);
 app.use("/api/areeba", areeba);
+app.use("/api/transactions", transactions);
 
 app.listen(port, "0.0.0.0");
