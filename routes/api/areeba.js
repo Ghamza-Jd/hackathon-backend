@@ -13,12 +13,13 @@ const User = require("../../models/User");
 router.post("/", (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
-    return res.status(400).json({ msg: "Please enter all fields" });
+    return res.status(400).json({ msg: "Please enter all fields", err: true });
   User.findOne({ username: username }).then(user => {
-    if (!user) return res.status(400).json({ msg: "User does not exists" });
+    if (!user)
+      return res.status(400).json({ msg: "User does not exists", err: true });
     bcrypt.compare(password, user.password).then(isMatch => {
       if (!isMatch)
-        return res.status(400).json({ msg: "Invalid Credentials!" });
+        return res.status(400).json({ msg: "Invalid Credentials!", err: true });
       const options = {
         method: "POST",
         url: "https://api.areeba.com/oauth2/token",

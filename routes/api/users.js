@@ -9,7 +9,7 @@ const User = require("../../models/User");
  * @access Public
  */
 router.post("/", (req, res) => {
-  const { first, last, username, phone, email, password } = req.body;
+  const { first, last, username, phone, password } = req.body;
   User.findOne({ username: username }).then(user => {
     if (user) return res.json({ msg: "User already exists" });
     const newUser = new User({
