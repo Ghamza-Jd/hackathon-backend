@@ -8,15 +8,15 @@ const Transaction = require("../../models/Transaction");
  * @access Private
  */
 router.post("/", (req, res) => {
-  const { buyer, price } = req.body;
+  const { buyer, price, seller } = req.body;
   const buyerTrans = new Transaction({
     username: buyer,
-    amount: price,
+    price: price,
     type: "pay"
   });
   const sellerTrans = new Transaction({
     username: seller,
-    amount: price,
+    price: price,
     type: "receive"
   });
   buyerTrans.save();
