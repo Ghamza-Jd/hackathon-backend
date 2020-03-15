@@ -8,50 +8,19 @@ const Transaction = require("../../models/Transaction");
  * @access Private
  */
 router.post("/", (req, res) => {
-  const contentType = req.headers["content-type"];
-  const Authorization = req.headers["authorization"];
-  const Accept = req.headers["accept"];
-  const {
-    buyer,
-    merchantId,
-    amount,
-    currency,
-    cardnb,
-    cardname,
-    cardcvv,
-    cardexmonth,
-    cardexyear
-  } = req.body;
-  const options = {
-    method: "POST",
-    url: "https://api.areeba.com/transfer/hackathon/pay",
-    headers: {
-      "Content-Type": contentType,
-      Authorization: Authorization,
-      Accept: Accept
-    },
-    form: {
-      merchantId: merchantId,
-      apiPassword: "60f2e352f77cb65ae57d05c2191a27e9",
-      amount: amount,
-      currency: currency,
-      card_number: cardnb,
-      card_name: cardname,
-      card_CVV: cardcvv,
-      card_expiryMonth: cardexmonth,
-      card_expiryYear: cardexyear
-    }
-  };
-  request(options, (err, response) => {
-    if (err) throw err;
-    res.send(response.toJSON().body);
-  });
+  const { buyer, price } = req.body;
   const buyerTrans = new Transaction({
     username: buyer,
-    amount: amount,
+    amount: price,
     type: "pay"
   });
+  const sellerTrans = new Transaction({
+    username: seller,
+    amount: price,
+    type: "receive"
+  });
   buyerTrans.save();
+  sellerTrans.save();
   res.status(200).json({ msg: "Transaction completed!" });
 });
 
