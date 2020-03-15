@@ -12,9 +12,9 @@ const User = require("../../models/User");
  */
 router.post("/", (req, res) => {
   const { username, password } = req.body;
+  if (!username || !password)
+    return res.status(400).json({ msg: "Please enter all fields" });
   User.findOne({ username: username }).then(user => {
-    if (!username || !password)
-      return res.status(400).json({ msg: "Please enter all fields" });
     if (!user) return res.status(400).json({ msg: "User does not exists" });
     bcrypt.compare(password, user.password).then(isMatch => {
       if (!isMatch)
